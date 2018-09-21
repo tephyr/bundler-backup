@@ -33,8 +33,8 @@ def find_repos(start_path):
     for child in root_path.iterdir():
         if is_repo(child):
             print("Found repo at {0}".format(child))
-            bundle = BundleInfo()
-            bundle.load(child, args.backup_root)
+            bundle = BundleInfo(args.repo_root, args.backup_root)
+            bundle.load(child)
             bundles.append(bundle)
         elif child.is_dir():
             find_repos(child)
@@ -63,7 +63,9 @@ def run():
 
     verify_args()
     find_repos(args.repo_root)
-    [b for b in bundles]
+    for b in bundles:
+        b.backup()
+
 
 if __name__ == '__main__':
     run()
